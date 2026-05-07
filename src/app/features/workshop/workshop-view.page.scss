@@ -1,0 +1,242 @@
+:host {
+  display: block;
+  color-scheme: light;
+}
+
+.panel {
+  background: linear-gradient(
+    165deg,
+    #fffefb 0%,
+    #faf3e6 38%,
+    #f3ead4 100%
+  );
+  border: 2px solid rgba(184, 134, 11, 0.38);
+  border-radius: 1rem;
+  padding: 1.35rem 1.3rem 1.45rem;
+  box-shadow:
+    var(--jewelry-shadow-gold),
+    inset 0 1px 0 rgba(255, 255, 255, 0.92);
+  color: var(--jewelry-ink-secondary);
+
+  > label {
+    display: block;
+    margin-top: 1rem;
+    font-weight: 700;
+    font-size: 0.88rem;
+    color: var(--jewelry-ink-secondary);
+  }
+
+  > select {
+    margin-top: 0.42rem;
+  }
+}
+
+h2 {
+  color: var(--jewelry-ink);
+  margin: 0;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  font-size: 1.28rem;
+}
+
+.panel > p:not(.empty) {
+  color: var(--jewelry-ink-secondary);
+  line-height: 1.5;
+  margin: 0.42rem 0 0;
+  max-width: 42rem;
+  font-size: 0.92rem;
+}
+
+.empty {
+  margin-top: 1rem;
+  text-align: center;
+  padding: 1.55rem 1.25rem;
+  border: 2px dashed rgba(166, 124, 0, 0.42);
+  border-radius: 0.85rem;
+  color: var(--jewelry-ink-secondary);
+  background: rgba(255, 253, 248, 0.92);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.7);
+}
+
+select,
+input {
+  margin-top: 0.38rem;
+  width: 100%;
+  background-color: #fffefb !important;
+  color: #1f1a14 !important;
+  border: 1px solid rgba(122, 93, 28, 0.38);
+  border-radius: 0.72rem;
+  padding: 0.68rem 0.75rem;
+  color-scheme: light;
+
+  &:focus {
+    outline: none;
+    border-color: rgba(166, 124, 0, 0.65);
+    box-shadow: 0 0 0 3px rgba(232, 197, 71, 0.28);
+  }
+}
+
+select option {
+  background-color: #fffefb;
+  color: #1f1a14;
+}
+
+.card {
+  margin-top: 1.05rem;
+  border: 1px solid rgba(166, 124, 0, 0.32);
+  border-radius: 0.95rem;
+  padding: 1.15rem 1.2rem 1.25rem;
+  background: linear-gradient(180deg, rgba(255, 253, 246, 0.98) 0%, #faf3e6 100%);
+  box-shadow: 0 8px 26px rgba(58, 42, 14, 0.07);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+
+  small {
+    color: var(--jewelry-ink-muted);
+    display: block;
+    margin-top: 0.22rem;
+  }
+}
+
+h3 {
+  margin: 0;
+  color: var(--jewelry-ink);
+  font-weight: 700;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.65rem;
+  margin: 0.85rem 0;
+
+  .full {
+    grid-column: span 2;
+  }
+
+  p {
+    margin: 0;
+    padding: 0.72rem 0.82rem;
+    background: rgba(255, 254, 251, 0.98);
+    border: 1px solid rgba(166, 124, 0, 0.22);
+    border-radius: 0.72rem;
+    border-inline-start: 3px solid var(--jewelry-gold-mid);
+    font-size: 0.9rem;
+    line-height: 1.45;
+    box-shadow: 0 4px 12px rgba(58, 42, 14, 0.05);
+    color: var(--jewelry-ink-secondary);
+  }
+
+  strong {
+    color: var(--jewelry-gold-deep);
+    font-weight: 800;
+  }
+}
+
+.img-row {
+  margin: 0.62rem 0;
+
+  img {
+    width: 100%;
+    max-height: 260px;
+    object-fit: cover;
+    border-radius: 0.72rem;
+    border: 1px solid rgba(166, 124, 0, 0.28);
+  }
+}
+
+.controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.85rem;
+  margin-top: 0.85rem;
+  padding: 1rem 1.05rem 1.1rem;
+  border-radius: 0.88rem;
+  border: 1px solid rgba(166, 124, 0, 0.28);
+  background: rgba(255, 253, 248, 0.96);
+
+  label {
+    display: block;
+    color: var(--jewelry-ink-secondary);
+    font-size: 0.84rem;
+    font-weight: 700;
+  }
+
+  .full {
+    grid-column: span 2;
+  }
+}
+
+.btn-row {
+  display: flex;
+  gap: 0.72rem;
+  align-items: center;
+  margin-top: 1rem;
+
+  a {
+    color: var(--jewelry-gold-deep);
+    font-weight: 600;
+
+    &:hover {
+      color: var(--jewelry-gold);
+    }
+  }
+}
+
+button {
+  border: none;
+  border-radius: 0.78rem;
+  padding: 0.72rem 1.05rem;
+  background: var(--jewelry-gradient-gold);
+  color: #2a1f0a;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.42rem;
+  box-shadow: 0 4px 16px rgba(166, 124, 0, 0.24);
+
+  &:hover:not(:disabled) {
+    filter: brightness(1.03);
+  }
+
+  &:disabled {
+    opacity: 0.62;
+    cursor: not-allowed;
+  }
+}
+
+.alert {
+  padding: 0.58rem 0.82rem;
+  border-radius: 0.68rem;
+  margin: 0.62rem 0 0;
+  font-size: 0.9rem;
+}
+
+.alert.error {
+  background: rgba(185, 28, 28, 0.08);
+  border: 1px solid rgba(185, 28, 28, 0.35);
+  color: #991b1b;
+}
+
+.alert.success {
+  background: rgba(21, 128, 61, 0.1);
+  border: 1px solid rgba(21, 128, 61, 0.35);
+  color: #166534;
+}
+
+@media (max-width: 900px) {
+  .info-grid,
+  .controls {
+    grid-template-columns: 1fr;
+
+    .full {
+      grid-column: span 1;
+    }
+  }
+}

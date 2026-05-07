@@ -1,0 +1,49 @@
+<section class="table-wrap">
+  <div class="orders-head">
+    <div class="orders-head__text">
+      <h2>{{ lang.isArabic() ? 'قائمة الطلبات' : 'Orders' }}</h2>
+      <p>{{ lang.isArabic() ? 'تصفح كل الطلبات والانتقال إلى التفاصيل.' : 'Browse every order and open details in one click.' }}</p>
+    </div>
+    @if (canCreate) {
+      <a routerLink="/orders/new" class="btn-new-order">
+        <i class="fa-solid fa-plus"></i>
+        {{ lang.isArabic() ? 'طلب جديد' : 'New order' }}
+      </a>
+    }
+  </div>
+
+  <div class="jewelry-data-grid">
+    <table>
+      <thead>
+        <tr>
+          <th>{{ lang.isArabic() ? 'الكود' : 'Code' }}</th>
+          <th>{{ lang.isArabic() ? 'العميل' : 'Customer' }}</th>
+          <th>{{ lang.isArabic() ? 'الفرع' : 'Branch' }}</th>
+          <th>{{ lang.isArabic() ? 'الورشة' : 'Workshop' }}</th>
+          <th>{{ lang.isArabic() ? 'الحالة' : 'Status' }}</th>
+          <th>{{ lang.isArabic() ? 'السعر' : 'Price' }}</th>
+          <th>{{ lang.isArabic() ? 'التاريخ' : 'Date' }}</th>
+          <th>{{ lang.isArabic() ? 'الإجراء' : 'Action' }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        @if (store.orders().length === 0) {
+          <tr><td colspan="8" class="empty">{{ lang.isArabic() ? 'لا توجد طلبات بعد.' : 'No orders yet.' }}</td></tr>
+        } @else {
+          @for (order of store.orders(); track order.id) {
+            <tr>
+              <td><span class="order-code">{{ order.code }}</span></td>
+              <td>{{ order.customer.name }}</td>
+              <td>{{ order.branch.name }}</td>
+              <td>{{ order.workshop?.name ?? (order.externalProviderName ?? '—') }}</td>
+              <td><app-status-badge [status]="order.status" /></td>
+              <td>{{ order.price ?? 0 | currency: 'EGP' }}</td>
+              <td>{{ order.createdAt | date: 'short' }}</td>
+              <td><a class="row-action" [routerLink]="['/orders', order.id]">{{ lang.isArabic() ? 'التفاصيل' : 'Details' }} <i class="fa-solid fa-chevron-right"></i></a></td>
+            </tr>
+          }
+        }
+      </tbody>
+    </table>
+  </div>
+</section>

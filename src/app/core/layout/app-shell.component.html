@@ -1,0 +1,52 @@
+<div class="shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-logo-frame">
+        <img src="/BIN TALIB LOGO English.png" alt="Bin Talib Logo" />
+      </div>
+      <div>
+        <p>Bin Talib</p>
+        <small>{{ lang.isArabic() ? 'نظام إدارة صيانة الذهب' : 'Jewellery Repair Suite' }}</small>
+      </div>
+    </div>
+
+    <nav>
+      @if (isAdmin()) {
+        <a routerLink="/dashboard" routerLinkActive="active"><i class="fa-solid fa-chart-line"></i>{{ lang.isArabic() ? 'لوحة التحكم' : 'Dashboard' }}</a>
+      }
+      @if (isAdmin() || isBranch()) {
+        <a routerLink="/orders/new" routerLinkActive="active"><i class="fa-solid fa-file-circle-plus"></i>{{ lang.isArabic() ? 'إنشاء طلب' : 'Create Order' }}</a>
+      }
+      <a routerLink="/orders" routerLinkActive="active"><i class="fa-solid fa-box-open"></i>{{ lang.isArabic() ? 'الطلبات' : 'Orders' }}</a>
+      @if (isAdmin() || isWorkshop()) {
+        <a routerLink="/workshop" routerLinkActive="active"><i class="fa-solid fa-screwdriver-wrench"></i>{{ lang.isArabic() ? 'الورشة' : 'Workshop' }}</a>
+      }
+    </nav>
+
+    @if (user(); as u) {
+      <div class="user-card">
+        <i class="fa-solid fa-user-shield"></i>
+        <div>
+          <p>{{ u.fullName }}</p>
+          <small>{{ u.role }}@if (u.branchName) { · {{ u.branchName }} } @if (u.workshopName) { · {{ u.workshopName }} }</small>
+        </div>
+      </div>
+    }
+  </aside>
+
+  <section class="content">
+    <header class="topbar">
+      <div>
+        <h1>{{ lang.isArabic() ? 'إدارة صيانة الذهب' : 'Jewellery Repair Management' }}</h1>
+        <p>{{ lang.isArabic() ? 'متابعة القطع من الاستلام حتى التسليم النهائي في الوقت الفعلي.' : 'Track customer pieces, workshop process, and delivery status in real-time.' }}</p>
+      </div>
+      <div class="actions">
+        <button type="button" (click)="lang.toggleLanguage()"><i class="fa-solid fa-language"></i>{{ lang.isArabic() ? ' English ' : '  العربية  ' }}</button>
+        <button type="button" (click)="logout()"><i class="fa-solid fa-arrow-right-from-bracket"></i>{{ lang.isArabic() ? '  تسجيل خروج  ' : ' Logout ' }}</button>
+      </div>
+    </header>
+    <main>
+      <router-outlet />
+    </main>
+  </section>
+</div>

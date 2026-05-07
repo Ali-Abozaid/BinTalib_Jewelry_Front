@@ -1,0 +1,133 @@
+<form [formGroup]="form" class="panel" (ngSubmit)="submit()">
+  <div class="panel-title">
+    <h2>{{ lang.isArabic() ? 'إنشاء طلب صيانة' : 'Create Repair Order' }}</h2>
+    <p>{{ lang.isArabic() ? 'تسجيل بيانات العميل والقطعة والفرع قبل إرسالها للورشة.' : 'Capture customer, item details, and branch handoff for workshop processing.' }}</p>
+  </div>
+
+  <fieldset>
+    <legend>{{ lang.isArabic() ? 'بيانات العميل' : 'Customer' }}</legend>
+    <div class="grid">
+      <label>
+        {{ lang.isArabic() ? 'عميل مسجل' : 'Existing Customer' }}
+        <select (change)="selectCustomer($any($event.target).value)">
+          <option value="">{{ lang.isArabic() ? 'اختر عميل موجود' : 'Select existing customer' }}</option>
+          @for (customer of customers(); track customer.id) {
+            <option [value]="customer.phone">{{ customer.name }} - {{ customer.phone }}</option>
+          }
+        </select>
+      </label>
+      <label>
+        {{ lang.isArabic() ? 'اسم العميل' : 'Customer Name' }}
+        <input formControlName="customerName" />
+      </label>
+      <label>
+        {{ lang.isArabic() ? 'رقم الهاتف' : 'Customer Phone' }}
+        <input formControlName="customerPhone" placeholder="+20..." />
+      </label>
+      <label>
+        {{ lang.isArabic() ? 'البريد الإلكتروني (اختياري)' : 'Email (optional)' }}
+        <input formControlName="customerEmail" type="email" />
+      </label>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>{{ lang.isArabic() ? 'بيانات الفرع' : 'Branch' }}</legend>
+    <div class="grid">
+      <label>
+        {{ lang.isArabic() ? 'الفرع' : 'Branch' }}
+        <select formControlName="branchId">
+          <option value="">--</option>
+          @for (branch of branches(); track branch.id) {
+            <option [value]="branch.id">{{ branch.name }}</option>
+          }
+        </select>
+      </label>
+      <label>
+        {{ lang.isArabic() ? 'اسم الموظف المستلم' : 'Receiving Employee' }}
+        <input formControlName="receivingEmployeeName" />
+      </label>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>{{ lang.isArabic() ? 'القطعة' : 'Item' }}</legend>
+    <div class="grid">
+      <label>
+        {{ lang.isArabic() ? 'الوزن قبل الصيانة (جم)' : 'Before Weight (g)' }}
+        <input type="number" step="0.01" formControlName="weightBefore" />
+      </label>
+      <label class="full">
+        {{ lang.isArabic() ? 'صورة قبل الصيانة' : 'Before image' }}
+        <app-image-upload
+          subfolder="orders"
+          [value]="form.controls.imageBeforeUrl.value"
+          (valueChange)="form.controls.imageBeforeUrl.setValue($event)" />
+      </label>
+      <label class="full">
+        {{ lang.isArabic() ? 'ملاحظات' : 'Notes' }}
+        <textarea formControlName="notes" rows="2"></textarea>
+      </label>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>{{ lang.isArabic() ? 'التسعير' : 'Pricing' }}</legend>
+    <div class="grid">
+      <label>
+        {{ lang.isArabic() ? 'نوع التسعير' : 'Pricing Type' }}
+        <select formControlName="pricingType">
+          <option value="Warranty">{{ lang.isArabic() ? 'مجاني (ضمان)' : 'Free (Warranty)' }}</option>
+          <option value="Branch">{{ lang.isArabic() ? 'السعر من الفرع' : 'Branch Defines Price' }}</option>
+          <option value="Workshop">{{ lang.isArabic() ? 'السعر من الورشة / المصنع' : 'Workshop / Factory Defines Price' }}</option>
+        </select>
+      </label>
+      @if (isPriceVisible && form.controls.pricingType.value === 'Branch') {
+        <label>
+          {{ lang.isArabic() ? 'السعر' : 'Price' }}
+          <input type="number" formControlName="price" />
+        </label>
+      }
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>{{ lang.isArabic() ? 'بيانات الورشة' : 'Workshop' }}</legend>
+    <div class="grid">
+      <label>
+        {{ lang.isArabic() ? 'الورشة (إن وجدت)' : 'Workshop (if existing)' }}
+        <select formControlName="workshopId">
+          <option value="">{{ lang.isArabic() ? 'لا توجد / إضافة جديد' : 'None / add new below' }}</option>
+          @for (w of workshops(); track w.id) {
+            <option [value]="w.id">{{ w.name }}</option>
+          }
+        </select>
+      </label>
+      <label>
+        {{ lang.isArabic() ? 'اسم ورشة جديد (إن لم تكن موجودة)' : 'New workshop name (if not in list)' }}
+        <input formControlName="newWorkshopName" />
+      </label>
+      <label>
+        {{ lang.isArabic() ? 'اسم مندوب الورشة' : 'Workshop Courier Name' }}
+        <input formControlName="workshopCourierName" />
+      </label>
+      <label>
+        {{ lang.isArabic() ? 'تاريخ التسليم للورشة' : 'Delivery date to workshop' }}
+        <input type="date" formControlName="deliveryToWorkshopDate" />
+      </label>
+    </div>
+  </fieldset>
+
+  @if (errorMessage(); as msg) {
+    <div class="error">{{ msg }}</div>
+  }
+
+  <button type="submit" [disabled]="submitting()">
+    <i class="fa-solid fa-plus"></i>
+    @if (submitting()) {
+      {{ lang.isArabic() ? 'جارٍ الحفظ...' : 'Saving...' }}
+    } @else {
+      {{ lang.isArabic() ? 'إنشاء الطلب' : 'Create Order' }}
+    }
+  </button>
+</form>

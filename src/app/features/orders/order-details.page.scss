@@ -1,0 +1,293 @@
+.wrapper {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 1rem;
+  align-items: start;
+}
+
+.card {
+  background: var(--jewelry-surface);
+  border: 1px solid var(--jewelry-border-strong);
+  border-radius: 0.95rem;
+  padding: 1.15rem;
+  color: var(--jewelry-ink-secondary);
+  box-shadow: var(--jewelry-shadow);
+}
+
+.title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 0.65rem;
+
+  small {
+    color: var(--jewelry-ink-muted);
+    display: block;
+    margin-top: 0.28rem;
+  }
+}
+
+h2,
+h3 {
+  margin: 0 0 0.72rem;
+  color: var(--jewelry-ink);
+  font-weight: 700;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin: 0.72rem 0;
+
+  > div {
+    display: grid;
+    gap: 0.55rem;
+  }
+
+  p {
+    margin: 0;
+    padding: 0.68rem 0.78rem;
+    background: var(--jewelry-surface-muted);
+    border: 1px solid var(--jewelry-border);
+    border-radius: 0.7rem;
+    border-inline-start: 3px solid var(--jewelry-gold-mid);
+    font-size: 0.9rem;
+    line-height: 1.45;
+  }
+
+  strong {
+    color: var(--jewelry-gold-deep);
+    font-weight: 800;
+  }
+}
+
+.images {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.65rem;
+  margin: 0.85rem 0;
+
+  small {
+    display: block;
+    margin-bottom: 0.22rem;
+    color: var(--jewelry-gold-deep);
+    font-size: 0.78rem;
+    font-weight: 600;
+  }
+
+  img {
+    width: 100%;
+    height: 210px;
+    object-fit: cover;
+    border-radius: 0.72rem;
+    border: 1px solid var(--jewelry-border);
+  }
+}
+
+.action-block {
+  border: 1px solid var(--jewelry-border-strong);
+  border-radius: 0.85rem;
+  padding: 0.9rem 1rem;
+  margin: 0.72rem 0;
+  background: var(--jewelry-gold-pale);
+
+  legend {
+    color: var(--jewelry-gold-deep);
+    font-weight: 700;
+    padding: 0 0.48rem;
+  }
+
+  .hint {
+    color: var(--jewelry-ink-muted);
+    font-size: 0.85rem;
+    margin: 0 0 0.52rem;
+    line-height: 1.45;
+  }
+}
+
+.action-block.otp {
+  border-color: rgba(59, 130, 246, 0.35);
+  background: rgba(219, 234, 254, 0.45);
+
+  legend {
+    color: #1d4ed8;
+  }
+}
+
+.action-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.72rem;
+
+  label {
+    display: grid;
+    gap: 0.42rem;
+    color: var(--jewelry-ink-secondary);
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 0.62rem 0.72rem;
+    border-radius: 0.72rem;
+    background: var(--jewelry-surface);
+    border: 1px solid var(--jewelry-border);
+    border-inline-start: 3px solid rgba(166, 124, 0, 0.35);
+  }
+}
+
+.action-grid .full {
+  grid-column: span 2;
+}
+
+.action-grid input {
+  background: var(--jewelry-input-bg);
+  border: 1px solid var(--jewelry-border-strong);
+  color: var(--jewelry-ink);
+  border-radius: 0.62rem;
+  padding: 0.55rem 0.72rem;
+
+  &:focus {
+    outline: none;
+    border-color: rgba(166, 124, 0, 0.45);
+    box-shadow: 0 0 0 3px rgba(232, 197, 71, 0.18);
+  }
+}
+
+.btn-row {
+  display: flex;
+  gap: 0.62rem;
+  flex-wrap: wrap;
+  margin-top: 0.62rem;
+}
+
+button {
+  border: 1px solid var(--jewelry-border-strong);
+  border-radius: 0.72rem;
+  padding: 0.68rem 0.92rem;
+  background: var(--jewelry-surface-muted);
+  color: var(--jewelry-ink);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.42rem;
+  font-weight: 600;
+
+  &:hover:not(:disabled) {
+    background: var(--jewelry-gold-pale);
+    border-color: rgba(166, 124, 0, 0.35);
+  }
+}
+
+button.primary {
+  border: none;
+  background: var(--jewelry-gradient-gold);
+  color: #2a1f0a;
+  font-weight: 700;
+  box-shadow: 0 3px 14px rgba(166, 124, 0, 0.22);
+
+  &:hover:not(:disabled) {
+    filter: brightness(1.03);
+  }
+}
+
+button.warning {
+  background: #d97706;
+  border-color: #b45309;
+  color: #fff;
+
+  &:hover:not(:disabled) {
+    filter: brightness(1.05);
+  }
+}
+
+button.danger {
+  background: #b91c1c;
+  border-color: #991b1b;
+  color: #fff;
+
+  &:hover:not(:disabled) {
+    filter: brightness(1.05);
+  }
+}
+
+button:disabled {
+  opacity: 0.58;
+  cursor: not-allowed;
+}
+
+.alert {
+  padding: 0.58rem 0.82rem;
+  border-radius: 0.68rem;
+  margin: 0.52rem 0;
+  font-size: 0.9rem;
+}
+
+.alert.error {
+  background: rgba(185, 28, 28, 0.08);
+  border: 1px solid rgba(185, 28, 28, 0.35);
+  color: #991b1b;
+}
+
+.alert.success {
+  background: rgba(21, 128, 61, 0.1);
+  border: 1px solid rgba(21, 128, 61, 0.35);
+  color: #166534;
+}
+
+.timeline {
+  margin-top: 0.72rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.item {
+  display: grid;
+  grid-template-columns: 16px 1fr;
+  gap: 0.82rem;
+}
+
+.item span {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-top: 0.32rem;
+  background: var(--jewelry-gradient-gold);
+  box-shadow: 0 0 0 5px rgba(232, 197, 71, 0.28);
+}
+
+h4 {
+  margin: 0;
+  text-transform: capitalize;
+  color: var(--jewelry-ink);
+  font-weight: 700;
+}
+
+p {
+  margin: 0.28rem 0;
+  color: var(--jewelry-ink-muted);
+  line-height: 1.45;
+}
+
+small {
+  color: var(--jewelry-ink-muted);
+}
+
+.missing {
+  color: var(--jewelry-ink);
+}
+
+@media (max-width: 1100px) {
+  .wrapper {
+    grid-template-columns: 1fr;
+  }
+
+  .info-grid,
+  .action-grid,
+  .images {
+    grid-template-columns: 1fr;
+  }
+
+  .action-grid .full {
+    grid-column: span 1;
+  }
+}

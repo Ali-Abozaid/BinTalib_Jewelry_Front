@@ -1,0 +1,80 @@
+<section class="stat-grid">
+  <article class="stat-card stat-card--total">
+    <div class="stat-card__head">
+      <span class="stat-card__label">{{ lang.isArabic() ? 'إجمالي الطلبات' : 'Total Orders' }}</span>
+      <span class="stat-card__icon"><i class="fa-solid fa-clipboard-list"></i></span>
+    </div>
+    <p class="stat-card__value">{{ stats().total }}</p>
+  </article>
+  <article class="stat-card stat-card--progress">
+    <div class="stat-card__head">
+      <span class="stat-card__label">{{ lang.isArabic() ? 'قيد الصيانة' : 'In Progress' }}</span>
+      <span class="stat-card__icon"><i class="fa-solid fa-gears"></i></span>
+    </div>
+    <p class="stat-card__value">{{ stats().inProgress }}</p>
+  </article>
+  <article class="stat-card stat-card--done">
+    <div class="stat-card__head">
+      <span class="stat-card__label">{{ lang.isArabic() ? 'مكتملة' : 'Completed' }}</span>
+      <span class="stat-card__icon"><i class="fa-solid fa-circle-check"></i></span>
+    </div>
+    <p class="stat-card__value">{{ stats().completed }}</p>
+  </article>
+  <article class="stat-card stat-card--delivered">
+    <div class="stat-card__head">
+      <span class="stat-card__label">{{ lang.isArabic() ? 'تم التسليم' : 'Delivered' }}</span>
+      <span class="stat-card__icon"><i class="fa-solid fa-hand-holding-heart"></i></span>
+    </div>
+    <p class="stat-card__value">{{ stats().delivered }}</p>
+  </article>
+  <article class="stat-card stat-card--external">
+    <div class="stat-card__head">
+      <span class="stat-card__label">{{ lang.isArabic() ? 'إصلاح خارجي' : 'External Repairs' }}</span>
+      <span class="stat-card__icon"><i class="fa-solid fa-truck-arrow-right"></i></span>
+    </div>
+    <p class="stat-card__value">{{ stats().external }}</p>
+  </article>
+</section>
+
+<section class="table-wrap">
+  <div class="section-head">
+    <div class="section-head__text">
+      <h2>{{ lang.isArabic() ? 'أحدث الطلبات' : 'Recent Orders' }}</h2>
+      <p>{{ lang.isArabic() ? 'آخر تحديثات الحالة والأسعار.' : 'Latest status and pricing updates.' }}</p>
+    </div>
+    <a class="section-head__link" routerLink="/orders">{{ lang.isArabic() ? 'عرض الكل' : 'View all' }} <i class="fa-solid fa-arrow-right"></i></a>
+  </div>
+
+  <div class="jewelry-data-grid">
+    <table>
+      <thead>
+        <tr>
+          <th>{{ lang.isArabic() ? 'الكود' : 'Code' }}</th>
+          <th>{{ lang.isArabic() ? 'العميل' : 'Customer' }}</th>
+          <th>{{ lang.isArabic() ? 'الفرع' : 'Branch' }}</th>
+          <th>{{ lang.isArabic() ? 'الحالة' : 'Status' }}</th>
+          <th>{{ lang.isArabic() ? 'السعر' : 'Price' }}</th>
+          <th>{{ lang.isArabic() ? 'تاريخ الإنشاء' : 'Created' }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        @if (loading()) {
+          <tr><td colspan="6" class="empty">{{ lang.isArabic() ? 'جارٍ التحميل...' : 'Loading...' }}</td></tr>
+        } @else if (recentOrders().length === 0) {
+          <tr><td colspan="6" class="empty">{{ lang.isArabic() ? 'لا توجد طلبات.' : 'No orders yet.' }}</td></tr>
+        } @else {
+          @for (order of recentOrders(); track order.id) {
+            <tr>
+              <td><a class="cell-link" [routerLink]="['/orders', order.id]">{{ order.code }}</a></td>
+              <td>{{ order.customer.name }}</td>
+              <td>{{ order.branch.name }}</td>
+              <td><app-status-badge [status]="order.status" /></td>
+              <td>{{ order.price ?? 0 | currency: 'EGP' }}</td>
+              <td>{{ order.createdAt | date: 'short' }}</td>
+            </tr>
+          }
+        }
+      </tbody>
+    </table>
+  </div>
+</section>

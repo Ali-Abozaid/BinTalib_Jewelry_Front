@@ -1,0 +1,105 @@
+<div class="login-page">
+  <div class="login-hero">
+    <div class="login-hero__pattern" aria-hidden="true"></div>
+    <header class="login-hero__top">
+      <button class="lang-btn" type="button" (click)="lang.toggleLanguage()">
+        <i class="fa-solid fa-language"></i>
+        {{ lang.isArabic() ? 'English' : 'العربية' }}
+      </button>
+    </header>
+
+    <div class="login-hero__brand">
+      <div class="hero-logo-frame">
+        <img class="hero-logo" src="/BIN TALIB LOGO English.png" alt="Bin Talib Logo" />
+      </div>
+      <div class="login-hero__titles">
+        <span class="login-hero__eyebrow">{{ lang.isArabic() ? 'مجوهرات بن طالب' : 'Bin Talib Jewellery' }}</span>
+        <h1>{{ lang.isArabic() ? 'إدارة عمليات صيانة الذهب' : 'Gold Repair Operations' }}</h1>
+      </div>
+    </div>
+
+    <p class="login-hero__lead">
+      {{
+        lang.isArabic()
+          ? 'منصة احترافية لإدارة استلام القطع، متابعة الورشة، وتسليم العميل بثقة كاملة.'
+          : 'Premium platform to manage branch, workshop, and customer handoff with confidence.'
+      }}
+    </p>
+
+    <ul class="feature-grid">
+      <li>
+        <span class="feature-grid__icon"><i class="fa-solid fa-gauge-high"></i></span>
+        <span class="feature-grid__body">
+          <strong>{{ lang.isArabic() ? 'متابعة لحظية' : 'Live visibility' }}</strong>
+          <span>{{ lang.isArabic() ? 'حالات الطلبات من لوحة الأدمن في الوقت الفعلي.' : 'Order statuses from the admin dashboard in real time.' }}</span>
+        </span>
+      </li>
+      <li>
+        <span class="feature-grid__icon"><i class="fa-solid fa-shield-halved"></i></span>
+        <span class="feature-grid__body">
+          <strong>{{ lang.isArabic() ? 'OTP آمن' : 'Secure OTP' }}</strong>
+          <span>{{ lang.isArabic() ? 'تحقق قبل تسليم القطعة للعميل.' : 'Verification before handing pieces back to customers.' }}</span>
+        </span>
+      </li>
+      <li>
+        <span class="feature-grid__icon"><i class="fa-solid fa-diagram-project"></i></span>
+        <span class="feature-grid__body">
+          <strong>{{ lang.isArabic() ? 'فرع وورشة' : 'Branch & workshop' }}</strong>
+          <span>{{ lang.isArabic() ? 'تنسيق كامل بين الفريقين على منصة واحدة.' : 'One workspace connecting branch and workshop teams.' }}</span>
+        </span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="login-aside">
+    <div class="login-aside__rail" aria-hidden="true"></div>
+    <form [formGroup]="form" class="login-card" (ngSubmit)="login()">
+      <div class="login-card__gold-bar" aria-hidden="true"></div>
+      <div class="login-card__inner">
+        <div class="login-card__header">
+          <h2>{{ lang.isArabic() ? 'مرحبًا بعودتك' : 'Welcome Back' }}</h2>
+          <p>{{ lang.isArabic() ? 'سجّل الدخول للمتابعة إلى لوحة التحكم.' : 'Sign in to continue to your dashboard.' }}</p>
+        </div>
+
+        <div class="login-field">
+          <label for="login-email">{{ lang.isArabic() ? 'البريد الإلكتروني' : 'Email' }}</label>
+          <div class="login-field__control">
+            <i class="fa-regular fa-envelope" aria-hidden="true"></i>
+            <input id="login-email" formControlName="email" type="email" autocomplete="username" placeholder="name@company.com" />
+          </div>
+        </div>
+
+        <div class="login-field">
+          <label for="login-password">{{ lang.isArabic() ? 'كلمة المرور' : 'Password' }}</label>
+          <div class="login-field__control">
+            <i class="fa-solid fa-lock" aria-hidden="true"></i>
+            <input id="login-password" formControlName="password" type="password" autocomplete="current-password" placeholder="••••••••" />
+          </div>
+        </div>
+
+        @if (errorMessage(); as msg) {
+          <div class="login-card__error" role="alert">{{ msg }}</div>
+        }
+
+        <button class="login-submit" type="submit" [disabled]="loading()">
+          @if (loading()) {
+            <i class="fa-solid fa-spinner fa-spin"></i>
+            {{ lang.isArabic() ? 'جارٍ التحقق...' : 'Signing in...' }}
+          } @else {
+            <span>{{ lang.isArabic() ? 'تسجيل الدخول' : 'Sign in' }}</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          }
+        </button>
+
+        <div class="demo-accounts">
+          <span class="demo-accounts__label">{{ lang.isArabic() ? 'حسابات تجريبية' : 'Demo accounts' }}</span>
+          <div class="demo-row">
+            @for (acc of demoAccounts; track acc.email) {
+              <button type="button" (click)="selectDemo(acc.email, acc.password)">{{ acc.label }}</button>
+            }
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

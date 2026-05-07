@@ -1,0 +1,92 @@
+<section class="panel">
+  <h2>{{ lang.isArabic() ? 'واجهة الورشة' : 'Workshop View' }}</h2>
+  <p>{{ lang.isArabic() ? 'الورشة تقرأ كل البيانات وتعدّل فقط الحالة والسعر إذا كان التسعير من الورشة.' : 'Workshop reads all data; only status and price (if pricing is workshop-defined) can be changed.' }}</p>
+
+  @if (orders().length === 0) {
+    <p class="empty">{{ lang.isArabic() ? 'لا توجد قطع حالياً في الورشة.' : 'No active orders in the workshop.' }}</p>
+  } @else {
+    <label>{{ lang.isArabic() ? 'اختر الطلب' : 'Choose order' }}</label>
+    <select [ngModel]="selectedOrderId()" (ngModelChange)="selectedOrderId.set($event)">
+      @for (order of orders(); track order.id) {
+        <option [value]="order.id">{{ order.code }} - {{ order.customer.name }} ({{ order.status }})</option>
+      }
+    </select>
+
+    @if (selectedOrder(); as order) {
+      <article class="card">
+        <div class="header">
+          <div>
+            <h3>{{ order.code }} | {{ order.customer.name }}</h3>
+            <small>{{ lang.isArabic() ? 'استلمت' : 'Received' }} {{ order.createdAt | date: 'short' }}</small>
+          </div>
+          <app-status-badge [status]="order.status" />
+        </div>
+
+        <div class="info-grid">
+          <p><strong>{{ lang.isArabic() ? 'الفرع:' : 'Branch:' }}</strong> {{ order.branch.name }}</p>
+          <p><strong>{{ lang.isArabic() ? 'المندوب:' : 'Courier:' }}</strong> {{ order.workshopCourierName ?? '-' }}</p>
+          <p><strong>{{ lang.isArabic() ? 'الوزن قبل:' : 'Weight before:' }}</strong> {{ order.weightBefore }}g</p>
+          <p><strong>{{ lang.isArabic() ? 'نوع التسعير:' : 'Pricing type:' }}</strong> {{ order.pricingType }}</p>
+          <p><strong>{{ lang.isArabic() ? 'السعر الحالي:' : 'Current price:' }}</strong> {{ order.price ?? 0 | currency: 'EGP' }}</p>
+          @if (order.notes) {
+            <p class="full"><strong>{{ lang.isArabic() ? 'ملاحظات:' : 'Notes:' }}</strong> {{ order.notes }}</p>
+          }
+        </div>
+
+        @if (order.imageBeforeUrl) {
+          <div class="img-row">
+            <img [src]="absoluteUrl(order.imageBeforeUrl)" alt="Before" />
+          </div>
+        }
+
+        <div class="controls">
+          <label>
+            {{ lang.isArabic() ? 'الحالة' : 'Status' }}
+            <select [ngModel]="selectedStatus()" (ngModelChange)="selectedStatus.set($event)">
+              <option value="InProgress">{{ lang.isArabic() ? 'قيد الصيانة' : 'In Progress' }}</option>
+              <option value="Completed">{{ lang.isArabic() ? 'تم الانتهاء' : 'Completed' }}</option>
+            </select>
+          </label>
+
+          @if (order.pricingType === 'Workshop') {
+            <label>
+              {{ lang.isArabic() ? 'سعر الورشة' : 'Workshop price' }}
+              <input type="number" [ngModel]="workshopPrice()" (ngModelChange)="workshopPrice.set($event)" />
+            </label>
+          }
+
+          <label>
+            {{ lang.isArabic() ? 'الوزن بعد (جم)' : 'After weight (g)' }}
+            <input type="number" step="0.01" [ngModel]="afterWeight()" (ngModelChange)="afterWeight.set($event)" />
+          </label>
+          <label class="full">
+            {{ lang.isArabic() ? 'صورة بعد الصيانة' : 'After image' }}
+            <app-image-upload
+              subfolder="orders"
+              [value]="afterImageUrl()"
+              (valueChange)="afterImageUrl.set($event ?? '')" />
+          </label>
+          <label class="full">
+            {{ lang.isArabic() ? 'ملاحظة' : 'Note' }}
+            <input [ngModel]="note()" (ngModelChange)="note.set($event)" />
+          </label>
+        </div>
+
+        @if (errorMessage(); as msg) {
+          <div class="alert error">{{ msg }}</div>
+        }
+        @if (successMessage(); as msg) {
+          <div class="alert success">{{ msg }}</div>
+        }
+
+        <div class="btn-row">
+          <button (click)="updateOrder()" [disabled]="busy()">
+            <i class="fa-solid fa-floppy-disk"></i>
+            {{ lang.isArabic() ? 'تحديث بيانات الورشة' : 'Update Workshop Data' }}
+          </button>
+          <a [routerLink]="['/orders', order.id]">{{ lang.isArabic() ? 'عرض الطلب الكامل' : 'View full order' }}</a>
+        </div>
+      </article>
+    }
+  }
+</section>
