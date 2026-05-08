@@ -5,6 +5,7 @@ import { CustomersApi } from '../api/customers.api';
 import { OrdersApi } from '../api/orders.api';
 import { WorkshopsApi } from '../api/workshops.api';
 import {
+  AssignWorkshopPayload,
   Branch,
   CreateOrderPayload,
   Customer,
@@ -101,6 +102,10 @@ export class OrdersStore {
 
   createOrder(payload: CreateOrderPayload) {
     return this.ordersApi.create(payload).pipe(tap((o) => this.upsertOrder(o, true)));
+  }
+
+  assignWorkshop(id: string, payload: AssignWorkshopPayload) {
+    return this.ordersApi.assignWorkshop(id, payload).pipe(tap((o) => this.upsertOrder(o)));
   }
 
   workshopUpdate(id: string, payload: WorkshopUpdatePayload) {

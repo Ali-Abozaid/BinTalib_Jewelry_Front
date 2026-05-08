@@ -1,0 +1,145 @@
+<section class="panel">
+  <header class="panel-header">
+    <div>
+      <h2>{{ lang.isArabic() ? 'تحديد الورشة' : 'Determine Workshop' }}</h2>
+      <p>
+        {{ lang.isArabic()
+          ? 'حدِّد الورشة (داخلية أو خارجية) للطلبات الجديدة قبل إرسالها للصيانة.'
+          : 'Pick the destination workshop (internal or external) for newly created orders before sending them for repair.' }}
+      </p>
+    </div>
+    <a class="link" routerLink="/orders/new"><i class="fa-solid fa-plus"></i>
+      {{ lang.isArabic() ? 'إنشاء طلب جديد' : 'New order' }}
+    </a>
+  </header>
+
+  @if (successMessage(); as msg) {
+    <div class="alert success">{{ msg }}</div>
+  }
+  @if (errorMessage(); as msg) {
+    <div class="alert error">{{ msg }}</div>
+  }
+
+  @if (pendingOrders().length === 0) {
+    <div class="empty">
+      <i class="fa-regular fa-circle-check"></i>
+      <p>{{ lang.isArabic() ? 'لا توجد طلبات بانتظار تحديد الورشة.' : 'No orders are waiting for workshop assignment.' }}</p>
+    </div>
+  } @else {
+    <ul class="order-list">
+      @for (order of pendingOrders(); track order.id) {
+        <li class="order-item" [class.expanded]="activeOrderId() === order.id">
+          <button type="button" class="order-row" (click)="toggle(order.id)">
+            <div class="order-row__main">
+              <span class="order-code">{{ order.code }}</span>
+              <span class="order-customer">{{ order.customer.name }} · {{ order.customer.phone }}</span>
+            </div>
+            <div class="order-row__meta">
+              <span class="meta-chip"><i class="fa-solid fa-store"></i> {{ order.branch.name }}</span>
+              <span class="meta-chip"><i class="fa-solid fa-weight-hanging"></i> {{ order.weightBefore }}g</span>
+              @if (order.isExternal) {
+                <span class="meta-chip warn"><i class="fa-solid fa-up-right-from-square"></i>
+                  {{ order.externalProviderName ?? (lang.isArabic() ? 'ورشة خارجية' : 'External') }}
+                </span>
+              }
+              <app-status-badge [status]="order.status" />
+              <i class="fa-solid fa-chevron-down chevron"></i>
+            </div>
+          </button>
+
+          @if (activeOrderId() === order.id) {
+            <form class="assign-form" [formGroup]="form" (ngSubmit)="submit(order.id)">
+              <div class="workshop-toggle" role="radiogroup"
+                [attr.aria-label]="lang.isArabic() ? 'نوع الورشة' : 'Workshop type'">
+                <label class="toggle-card" [class.active]="form.controls.workshopType.value === 'Internal'">
+                  <input type="radio" value="Internal" formControlName="workshopType" />
+                  <span class="toggle-card__icon"><i class="fa-solid fa-screwdriver-wrench"></i></span>
+                  <span class="toggle-card__body">
+                    <strong>{{ lang.isArabic() ? 'ورشة داخلية' : 'Internal workshop' }}</strong>
+                    <small>{{ lang.isArabic() ? 'إرسال لورشة مسجلة في النظام.' : 'Send to a registered workshop.' }}</small>
+                  </span>
+                </label>
+                <label class="toggle-card" [class.active]="form.controls.workshopType.value === 'External'">
+                  <input type="radio" value="External" formControlName="workshopType" />
+                  <span class="toggle-card__icon"><i class="fa-solid fa-up-right-from-square"></i></span>
+                  <span class="toggle-card__body">
+                    <strong>{{ lang.isArabic() ? 'ورشة خارجية' : 'External workshop' }}</strong>
+                    <small>{{ lang.isArabic() ? 'إرسال لجهة خارجية باسمها فقط.' : 'Send to an external provider by name.' }}</small>
+                  </span>
+                </label>
+              </div>
+
+              @if (form.controls.workshopType.value === 'Internal') {
+                <div class="grid">
+                  <label>
+                    {{ lang.isArabic() ? 'الورشة (إن وجدت)' : 'Workshop (if existing)' }}
+                    <select formControlName="workshopId">
+                      <option value="">{{ lang.isArabic() ? 'لا توجد / إضافة جديد' : 'None / add new below' }}</option>
+                      @for (w of workshops(); track w.id) {
+                        <option [value]="w.id">{{ w.name }}</option>
+                      }
+                    </select>
+                  </label>
+                  <label>
+                    {{ lang.isArabic() ? 'اسم ورشة جديد (إن لم تكن موجودة)' : 'New workshop name (if not in list)' }}
+                    <input formControlName="newWorkshopName" />
+                  </label>
+                  <label>
+                    {{ lang.isArabic() ? 'اسم مندوب الورشة' : 'Workshop Courier Name' }}
+                    <input formControlName="workshopCourierName" />
+                  </label>
+                  <label>
+                    {{ lang.isArabic() ? 'تاريخ التسليم للورشة' : 'Delivery date to workshop' }}
+                    <input type="date" formControlName="deliveryToWorkshopDate" />
+                  </label>
+                </div>
+              } @else {
+                <div class="grid">
+                  <label class="full">
+                    {{ lang.isArabic() ? 'اسم الورشة الخارجية' : 'External workshop name' }}
+                    <input formControlName="externalProviderName"
+                      [placeholder]="lang.isArabic() ? 'مثال: ورشة المعز' : 'e.g. Al-Moez Workshop'" />
+                  </label>
+                </div>
+              }
+
+              <label class="note-field">
+                {{ lang.isArabic() ? 'ملاحظة (اختياري)' : 'Note (optional)' }}
+                <input formControlName="note" />
+              </label>
+
+              <div class="row-actions">
+                <button type="button" class="ghost" (click)="toggle(order.id)" [disabled]="busy()">
+                  {{ lang.isArabic() ? 'إلغاء' : 'Cancel' }}
+                </button>
+                <button type="submit" class="primary" [disabled]="busy()">
+                  <i class="fa-solid fa-paper-plane"></i>
+                  @if (busy()) {
+                    {{ lang.isArabic() ? 'جارٍ الإرسال...' : 'Sending...' }}
+                  } @else {
+                    @if (form.controls.workshopType.value === 'External') {
+                      {{ lang.isArabic() ? 'إرسال للورشة الخارجية' : 'Send to external workshop' }}
+                    } @else {
+                      {{ lang.isArabic() ? 'إرسال للورشة الداخلية' : 'Send to internal workshop' }}
+                    }
+                  }
+                </button>
+              </div>
+            </form>
+          }
+
+          <small class="created-at">
+            {{ lang.isArabic() ? 'تاريخ الإنشاء:' : 'Created:' }} {{ order.createdAt | date: 'medium' }}
+          </small>
+        </li>
+      }
+    </ul>
+  }
+
+  <p class="footnote">
+    <i class="fa-regular fa-circle-info"></i>
+    {{ lang.isArabic()
+      ? 'تظهر هنا فقط الطلبات الجديدة التي لم يتم إرسالها بعد. بعد التحديد ستنتقل إلى مسار الورشة الداخلية أو الخارجية.'
+      : 'Only fresh orders that haven\'t been sent yet appear here. After assignment they move into the internal or external workshop flow.' }}
+  </p>
+</section>

@@ -1,0 +1,367 @@
+:host {
+  display: block;
+  color-scheme: light;
+}
+
+.panel {
+  background: linear-gradient(165deg, #fffefb 0%, #faf3e6 38%, #f3ead4 100%);
+  border: 2px solid rgba(184, 134, 11, 0.38);
+  border-radius: 1rem;
+  padding: 1.35rem 1.3rem 1.45rem;
+  box-shadow: var(--jewelry-shadow-gold), inset 0 1px 0 rgba(255, 255, 255, 0.92);
+  color: var(--jewelry-ink);
+}
+
+.panel-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.1rem;
+  padding-bottom: 0.95rem;
+  border-bottom: 1px solid var(--jewelry-border-strong);
+
+  h2 {
+    margin: 0;
+    color: var(--jewelry-ink);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    font-size: 1.28rem;
+  }
+
+  p {
+    color: var(--jewelry-ink-secondary);
+    margin: 0.4rem 0 0;
+    line-height: 1.5;
+    max-width: 44rem;
+    font-size: 0.92rem;
+  }
+
+  .link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    text-decoration: none;
+    font-weight: 700;
+    color: var(--jewelry-gold-deep);
+    border: 1px solid rgba(166, 124, 0, 0.45);
+    border-radius: 0.7rem;
+    padding: 0.45rem 0.85rem;
+    background: rgba(255, 250, 232, 0.85);
+    transition: background 0.18s ease;
+    flex-shrink: 0;
+
+    &:hover { background: rgba(255, 246, 213, 1); }
+  }
+}
+
+.alert {
+  margin: 0 0 0.9rem;
+  padding: 0.6rem 0.85rem;
+  border-radius: 0.7rem;
+  font-weight: 600;
+
+  &.success {
+    background: rgba(22, 163, 74, 0.1);
+    border: 1px solid rgba(22, 163, 74, 0.35);
+    color: #166534;
+  }
+
+  &.error {
+    background: rgba(185, 28, 28, 0.08);
+    border: 1px solid rgba(185, 28, 28, 0.35);
+    color: #991b1b;
+  }
+}
+
+.empty {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 1.1rem 1rem;
+  border-radius: 0.85rem;
+  border: 1px dashed rgba(166, 124, 0, 0.45);
+  background: rgba(255, 250, 232, 0.6);
+  color: var(--jewelry-ink-secondary);
+
+  i { font-size: 1.4rem; color: var(--jewelry-gold-deep); }
+  p { margin: 0; }
+}
+
+.order-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.7rem;
+}
+
+.order-item {
+  border: 1px solid rgba(166, 124, 0, 0.32);
+  border-radius: 0.95rem;
+  background: rgba(255, 254, 251, 0.97);
+  box-shadow: 0 4px 14px rgba(58, 42, 14, 0.05);
+  overflow: hidden;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+
+  &.expanded {
+    border-color: var(--jewelry-gold-deep);
+    box-shadow: 0 8px 22px rgba(166, 124, 0, 0.18);
+  }
+}
+
+.order-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 1rem;
+  padding: 0.85rem 1rem;
+  border: none;
+  background: transparent;
+  text-align: inherit;
+  cursor: pointer;
+  font: inherit;
+  color: var(--jewelry-ink);
+
+  &__main {
+    display: flex;
+    flex-direction: column;
+    gap: 0.18rem;
+    align-items: flex-start;
+  }
+
+  &__meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .order-code {
+    font-weight: 800;
+    color: var(--jewelry-gold-deep);
+    letter-spacing: 0.02em;
+    font-size: 0.95rem;
+  }
+
+  .order-customer {
+    color: var(--jewelry-ink-secondary);
+    font-size: 0.86rem;
+  }
+
+  .chevron {
+    transition: transform 0.18s ease;
+    color: var(--jewelry-ink-secondary);
+  }
+}
+
+.order-item.expanded .chevron { transform: rotate(180deg); }
+
+.meta-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.22rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(232, 197, 71, 0.16);
+  color: var(--jewelry-gold-deep);
+  font-size: 0.78rem;
+  font-weight: 600;
+  border: 1px solid rgba(166, 124, 0, 0.28);
+
+  &.warn {
+    background: rgba(249, 115, 22, 0.12);
+    color: #9a3412;
+    border-color: rgba(234, 88, 12, 0.35);
+  }
+
+  i { font-size: 0.78rem; }
+}
+
+.assign-form {
+  padding: 0.2rem 1rem 1.1rem;
+  border-top: 1px dashed rgba(166, 124, 0, 0.3);
+  display: grid;
+  gap: 0.85rem;
+}
+
+.workshop-toggle {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.7rem;
+  margin-top: 0.85rem;
+
+  .toggle-card {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.78rem 0.9rem;
+    border-radius: 0.85rem;
+    border: 1.5px solid rgba(166, 124, 0, 0.32);
+    background: rgba(255, 254, 251, 0.96);
+    cursor: pointer;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+    color: var(--jewelry-ink);
+
+    input[type='radio'] {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    &__icon {
+      flex: 0 0 auto;
+      width: 2.1rem;
+      height: 2.1rem;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: rgba(232, 197, 71, 0.18);
+      color: var(--jewelry-gold-deep);
+    }
+
+    &__body {
+      display: grid;
+      gap: 0.18rem;
+
+      strong { font-weight: 800; color: var(--jewelry-ink); font-size: 0.92rem; }
+      small { color: var(--jewelry-ink-secondary); font-weight: 500; line-height: 1.35; }
+    }
+
+    &.active {
+      border-color: var(--jewelry-gold-deep);
+      background: linear-gradient(145deg, rgba(255, 250, 230, 1) 0%, rgba(243, 226, 178, 0.85) 100%);
+      box-shadow: 0 6px 18px rgba(166, 124, 0, 0.2);
+
+      .toggle-card__icon {
+        background: var(--jewelry-gradient-gold);
+        color: #2a1f0a;
+      }
+    }
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem;
+
+  > label {
+    display: grid;
+    gap: 0.4rem;
+    color: var(--jewelry-ink-secondary);
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 0.7rem 0.85rem;
+    border-radius: 0.78rem;
+    background: rgba(255, 254, 251, 0.98);
+    border: 1px solid rgba(166, 124, 0, 0.28);
+    border-inline-start: 3px solid var(--jewelry-gold-mid);
+  }
+
+  .full { grid-column: span 2; }
+}
+
+.note-field {
+  display: grid;
+  gap: 0.4rem;
+  color: var(--jewelry-ink-secondary);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+input,
+select {
+  background-color: #fffefb !important;
+  color: #1f1a14 !important;
+  border: 1px solid rgba(122, 93, 28, 0.38);
+  border-radius: 0.7rem;
+  padding: 0.62rem 0.7rem;
+  font-family: inherit;
+  color-scheme: light;
+
+  &:focus {
+    outline: none;
+    border-color: rgba(166, 124, 0, 0.65);
+    box-shadow: 0 0 0 3px rgba(232, 197, 71, 0.28);
+  }
+}
+
+.row-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.55rem;
+
+  button {
+    border: none;
+    border-radius: 0.7rem;
+    padding: 0.6rem 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+
+    &.primary {
+      background: var(--jewelry-gradient-gold);
+      color: #2a1f0a;
+      box-shadow: 0 4px 14px rgba(166, 124, 0, 0.26);
+
+      &:hover:not(:disabled) { filter: brightness(1.03); }
+    }
+
+    &.ghost {
+      background: transparent;
+      border: 1px solid rgba(166, 124, 0, 0.45);
+      color: var(--jewelry-ink-secondary);
+
+      &:hover:not(:disabled) { background: rgba(255, 250, 232, 0.7); }
+    }
+
+    &:disabled { opacity: 0.6; cursor: not-allowed; }
+  }
+}
+
+.created-at {
+  display: block;
+  padding: 0 1rem 0.7rem;
+  color: var(--jewelry-ink-secondary);
+  font-size: 0.78rem;
+}
+
+.footnote {
+  margin: 1rem 0 0;
+  padding: 0.65rem 0.85rem;
+  border-radius: 0.7rem;
+  border: 1px dashed rgba(166, 124, 0, 0.35);
+  background: rgba(255, 250, 232, 0.55);
+  color: var(--jewelry-ink-secondary);
+  font-size: 0.82rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  i { color: var(--jewelry-gold-deep); }
+}
+
+@media (max-width: 900px) {
+  .panel-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .grid,
+  .workshop-toggle { grid-template-columns: 1fr; }
+
+  .grid .full { grid-column: span 1; }
+
+  .order-row {
+    flex-direction: column;
+    align-items: stretch;
+
+    &__meta { justify-content: flex-start; }
+  }
+}

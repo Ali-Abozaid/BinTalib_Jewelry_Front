@@ -55,7 +55,7 @@
       }
 
       @if (canWorkshopAct() && (data.status === 'SentToWorkshop' || data.status === 'InProgress' || data.status === 'Completed')) {
-        <fieldset class="action-block">
+        <!-- <fieldset class="action-block">
           <legend>{{ lang.isArabic() ? 'إجراءات الورشة' : 'Workshop actions' }}</legend>
           <div class="action-grid">
             @if (data.pricingType === 'Workshop') {
@@ -84,7 +84,7 @@
               {{ lang.isArabic() ? 'تم الانتهاء من الصيانة' : 'Mark Completed' }}
             </button>
           </div>
-        </fieldset>
+        </fieldset> -->
       }
 
       @if (canBranchAct() && canReceiveFromWorkshop()) {
@@ -117,9 +117,21 @@
       }
 
       @if (canBranchAct() && canMoveToExternal()) {
-        <fieldset class="action-block">
-          <legend>{{ lang.isArabic() ? 'إصلاح خارجي' : 'External repair' }}</legend>
-          <p class="hint">{{ lang.isArabic() ? 'سيتم إلغاء عملية الورشة، ستتعامل مع جهة خارجية حتى تعود القطعة.' : 'Workshop process will be cancelled. Item will be tracked through an external provider.' }}</p>
+        <!-- <fieldset class="action-block">
+          <legend>
+            {{ data.isExternal && data.status === 'Created'
+              ? (lang.isArabic() ? 'إرسال للورشة الخارجية' : 'Send to external workshop')
+              : (lang.isArabic() ? 'إصلاح خارجي' : 'External repair') }}
+          </legend>
+           <p class="hint">
+            {{ data.isExternal && data.status === 'Created'
+              ? (lang.isArabic()
+                  ? 'هذا الطلب مُسجَّل بورشة خارجية. أكِّد اسم الورشة وحدِّث الحالة إلى "مُرسَل للورشة الخارجية".'
+                  : 'This order is tagged with an external workshop. Confirm the name and mark it as sent to the external workshop.')
+              : (lang.isArabic()
+                  ? 'سيتم إلغاء عملية الورشة، ستتعامل مع جهة خارجية حتى تعود القطعة.'
+                  : 'Workshop process will be cancelled. Item will be tracked through an external provider.') }}
+          </p> 
           <div class="action-grid">
             <label class="full">
               {{ lang.isArabic() ? 'اسم الجهة الخارجية' : 'External provider name' }}
@@ -129,10 +141,12 @@
           <div class="btn-row">
             <button type="button" class="warning" (click)="moveToExternal()" [disabled]="busy()">
               <i class="fa-solid fa-share-from-square"></i>
-              {{ lang.isArabic() ? 'تحويل لإصلاح خارجي' : 'Move to external repair' }}
+              {{ data.isExternal && data.status === 'Created'
+                ? (lang.isArabic() ? 'إرسال للورشة الخارجية' : 'Send to external workshop')
+                : (lang.isArabic() ? 'تحويل لإصلاح خارجي' : 'Move to external repair') }}
             </button>
           </div>
-        </fieldset>
+        </fieldset> -->
       }
 
       @if (canBranchAct() && canReceiveFromExternal()) {
@@ -193,7 +207,7 @@
       }
     </article>
 
-    <article class="card">
+    <!-- <article class="card">
       <h3>{{ lang.isArabic() ? 'التسلسل الزمني للحالة' : 'Status Timeline' }}</h3>
       <div class="timeline">
         @for (item of data.statusHistory; track $index) {
@@ -207,7 +221,7 @@
           </div>
         }
       </div>
-    </article>
+    </article> -->
   </section>
 } @else {
   <p class="missing">{{ lang.isArabic() ? 'الطلب غير موجود.' : 'Order not found.' }} <a routerLink="/orders">{{ lang.isArabic() ? 'العودة للقائمة' : 'Back to list' }}</a></p>

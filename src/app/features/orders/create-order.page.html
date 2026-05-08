@@ -1,7 +1,7 @@
 <form [formGroup]="form" class="panel" (ngSubmit)="submit()">
   <div class="panel-title">
     <h2>{{ lang.isArabic() ? 'إنشاء طلب صيانة' : 'Create Repair Order' }}</h2>
-    <p>{{ lang.isArabic() ? 'تسجيل بيانات العميل والقطعة والفرع قبل إرسالها للورشة.' : 'Capture customer, item details, and branch handoff for workshop processing.' }}</p>
+    <p>{{ lang.isArabic() ? 'تسجيل بيانات العميل والقطعة والفرع. سيتم تحديد الورشة لاحقًا من شاشة "تحديد الورشة".' : 'Capture customer, item, branch and pricing details. The workshop is picked later from the "Determine Workshop" screen.' }}</p>
   </div>
 
   <fieldset>
@@ -91,32 +91,12 @@
     </div>
   </fieldset>
 
-  <fieldset>
-    <legend>{{ lang.isArabic() ? 'بيانات الورشة' : 'Workshop' }}</legend>
-    <div class="grid">
-      <label>
-        {{ lang.isArabic() ? 'الورشة (إن وجدت)' : 'Workshop (if existing)' }}
-        <select formControlName="workshopId">
-          <option value="">{{ lang.isArabic() ? 'لا توجد / إضافة جديد' : 'None / add new below' }}</option>
-          @for (w of workshops(); track w.id) {
-            <option [value]="w.id">{{ w.name }}</option>
-          }
-        </select>
-      </label>
-      <label>
-        {{ lang.isArabic() ? 'اسم ورشة جديد (إن لم تكن موجودة)' : 'New workshop name (if not in list)' }}
-        <input formControlName="newWorkshopName" />
-      </label>
-      <label>
-        {{ lang.isArabic() ? 'اسم مندوب الورشة' : 'Workshop Courier Name' }}
-        <input formControlName="workshopCourierName" />
-      </label>
-      <label>
-        {{ lang.isArabic() ? 'تاريخ التسليم للورشة' : 'Delivery date to workshop' }}
-        <input type="date" formControlName="deliveryToWorkshopDate" />
-      </label>
-    </div>
-  </fieldset>
+  <p class="workshop-cta">
+    <i class="fa-regular fa-circle-info"></i>
+    {{ lang.isArabic()
+      ? 'بعد حفظ الطلب ستجده في شاشة "تحديد الورشة" لتحديد الورشة الداخلية أو الخارجية وإرساله.'
+      : 'After saving, the order will appear in the "Determine Workshop" screen where you can choose an internal or external workshop and send it.' }}
+  </p>
 
   @if (errorMessage(); as msg) {
     <div class="error">{{ msg }}</div>

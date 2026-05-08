@@ -111,6 +111,25 @@ legend {
   grid-column: span 2;
 }
 
+.workshop-cta {
+  margin: 0.4rem 0 1rem;
+  padding: 0.7rem 0.9rem;
+  border-radius: 0.78rem;
+  border: 1px dashed rgba(166, 124, 0, 0.45);
+  background: rgba(255, 250, 232, 0.7);
+  color: var(--jewelry-ink-secondary);
+  font-size: 0.87rem;
+  line-height: 1.5;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+
+  i {
+    color: var(--jewelry-gold-deep);
+    font-size: 1rem;
+  }
+}
+
 .error {
   background: rgba(185, 28, 28, 0.08);
   border: 1px solid rgba(185, 28, 28, 0.35);

@@ -7,15 +7,6 @@ import { AuthService } from '../../core/auth/auth.service';
 import { PricingType } from '../../core/models/order.model';
 import { ImageUploadComponent } from '../../shared/components/image-upload.component';
 
-/** Local calendar date as `YYYY-MM-DD` for `<input type="date">`. */
-function todayLocalIso(): string {
-  const d = new Date();
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, '0');
-  const day = String(d.getDate()).padStart(2, '0');
-  return `${y}-${m}-${day}`;
-}
-
 @Component({
   selector: 'app-create-order-page',
   standalone: true,
@@ -32,7 +23,6 @@ export class CreateOrderPageComponent implements OnInit {
 
   protected readonly branches = this.store.branches;
   protected readonly customers = this.store.customers;
-  protected readonly workshops = this.store.workshops;
 
   protected readonly user = this.auth.user;
   protected readonly isBranchUser = computed(() => this.auth.role() === 'Branch');
@@ -43,14 +33,10 @@ export class CreateOrderPageComponent implements OnInit {
     customerEmail: [''],
     branchId: ['', Validators.required],
     receivingEmployeeName: ['', Validators.required],
-    workshopId: [''],
-    newWorkshopName: [''],
-    workshopCourierName: [''],
     weightBefore: [0, [Validators.required, Validators.min(0.01)]],
     imageBeforeUrl: [''],
     pricingType: ['Warranty', Validators.required],
     price: [0],
-    deliveryToWorkshopDate: [todayLocalIso()],
     notes: ['']
   });
 
@@ -105,20 +91,16 @@ export class CreateOrderPageComponent implements OnInit {
         customerEmail: value.customerEmail || undefined,
         branchId: value.branchId,
         receivingEmployeeName: value.receivingEmployeeName ?? '',
-        workshopId: value.workshopId || null,
-        newWorkshopName: !value.workshopId && value.newWorkshopName ? value.newWorkshopName : undefined,
-        workshopCourierName: value.workshopCourierName || undefined,
         weightBefore: Number(value.weightBefore) || 0,
         imageBeforeUrl: value.imageBeforeUrl || undefined,
         pricingType,
         price,
-        deliveryToWorkshopDate: value.deliveryToWorkshopDate || undefined,
         notes: value.notes || undefined
       })
       .subscribe({
         next: () => {
           this.submitting.set(false);
-          this.router.navigateByUrl('/orders');
+          this.router.navigateByUrl('/workshop-assignment');
         },
         error: (err) => {
           this.submitting.set(false);

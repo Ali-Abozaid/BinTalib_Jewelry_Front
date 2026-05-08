@@ -18,6 +18,9 @@
         <a routerLink="/orders/new" routerLinkActive="active"><i class="fa-solid fa-file-circle-plus"></i>{{ lang.isArabic() ? 'إنشاء طلب' : 'Create Order' }}</a>
       }
       <a routerLink="/orders" routerLinkActive="active"><i class="fa-solid fa-box-open"></i>{{ lang.isArabic() ? 'الطلبات' : 'Orders' }}</a>
+      @if (isAdmin() || isBranch()) {
+        <a routerLink="/workshop-assignment" routerLinkActive="active"><i class="fa-solid fa-route"></i>{{ lang.isArabic() ? 'تحديد الورشة' : 'Determine Workshop' }}</a>
+      }
       @if (isAdmin() || isWorkshop()) {
         <a routerLink="/workshop" routerLinkActive="active"><i class="fa-solid fa-screwdriver-wrench"></i>{{ lang.isArabic() ? 'الورشة' : 'Workshop' }}</a>
       }

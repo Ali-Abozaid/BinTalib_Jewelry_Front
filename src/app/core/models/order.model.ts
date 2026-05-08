@@ -90,6 +90,8 @@ export interface CreateOrderPayload {
   workshopId?: string | null;
   newWorkshopName?: string;
   workshopCourierName?: string;
+  isExternal?: boolean;
+  externalProviderName?: string;
   weightBefore: number;
   imageBeforeUrl?: string;
   pricingType: PricingType;
@@ -114,6 +116,16 @@ export interface ReceiveFromWorkshopPayload {
 
 export interface MoveToExternalPayload {
   externalProviderName: string;
+  note?: string;
+}
+
+export interface AssignWorkshopPayload {
+  isExternal: boolean;
+  workshopId?: string | null;
+  newWorkshopName?: string;
+  workshopCourierName?: string;
+  deliveryToWorkshopDate?: string;
+  externalProviderName?: string;
   note?: string;
 }
 

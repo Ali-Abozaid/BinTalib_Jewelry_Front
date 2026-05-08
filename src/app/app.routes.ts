@@ -7,6 +7,7 @@ import { OrdersListPageComponent } from './features/orders/orders-list.page';
 import { DashboardPageComponent } from './features/dashboard/dashboard.page';
 import { LoginPageComponent } from './features/auth/login.page';
 import { WorkshopViewPageComponent } from './features/workshop/workshop-view.page';
+import { WorkshopAssignmentPageComponent } from './features/workshop-assignment/workshop-assignment.page';
 import { authGuard, roleGuard } from './core/auth/guards';
 
 export const routes: Routes = [
@@ -28,6 +29,11 @@ export const routes: Routes = [
       },
       { path: 'orders', component: OrdersListPageComponent },
       { path: 'orders/:id', component: OrderDetailsPageComponent },
+      {
+        path: 'workshop-assignment',
+        component: WorkshopAssignmentPageComponent,
+        canActivate: [roleGuard(['Admin', 'Branch'])]
+      },
       {
         path: 'workshop',
         component: WorkshopViewPageComponent,

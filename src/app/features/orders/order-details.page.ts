@@ -79,7 +79,12 @@ export class OrderDetailsPageComponent implements OnInit {
     const id = this.orderId();
     if (id) {
       this.store.refreshOrder(id).subscribe({
-        next: (o) => this.localOrder.set(o),
+        next: (o) => {
+          this.localOrder.set(o);
+          if (!this.externalProvider() && o.externalProviderName) {
+            this.externalProvider.set(o.externalProviderName);
+          }
+        },
         error: () => {}
       });
     }

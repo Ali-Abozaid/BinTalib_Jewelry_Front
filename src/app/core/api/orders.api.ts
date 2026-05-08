@@ -3,6 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import {
+  AssignWorkshopPayload,
   CreateOrderPayload,
   MoveToExternalPayload,
   OrderStats,
@@ -31,6 +32,10 @@ export class OrdersApi {
 
   create(payload: CreateOrderPayload): Observable<RepairOrder> {
     return this.http.post<RepairOrder>(this.base, payload);
+  }
+
+  assignWorkshop(id: string, payload: AssignWorkshopPayload): Observable<RepairOrder> {
+    return this.http.put<RepairOrder>(`${this.base}/${id}/assign-workshop`, payload);
   }
 
   workshopUpdate(id: string, payload: WorkshopUpdatePayload): Observable<RepairOrder> {
