@@ -6,7 +6,7 @@ export type AppLanguage = 'en' | 'ar';
 @Injectable({ providedIn: 'root' })
 export class UiLanguageService {
   private readonly document = inject(DOCUMENT);
-  private readonly languageSignal = signal<AppLanguage>('en');
+  private readonly languageSignal = signal<AppLanguage>('ar');
 
   readonly language = this.languageSignal.asReadonly();
   readonly isArabic = computed(() => this.languageSignal() === 'ar');

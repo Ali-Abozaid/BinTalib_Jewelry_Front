@@ -1,6 +1,7 @@
-import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { Component, ElementRef, OnInit, computed, inject, signal, viewChild } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { take } from 'rxjs';
 import { OrdersStore } from '../../core/services/orders.store';
 import { UiLanguageService } from '../../core/services/ui-language.service';
 import { AuthService } from '../../core/auth/auth.service';
@@ -25,7 +26,6 @@ export class CreateOrderPageComponent implements OnInit {
   protected readonly customers = this.store.customers;
 
   protected readonly user = this.auth.user;
-  protected readonly isBranchUser = computed(() => this.auth.role() === 'Branch');
 
   protected readonly form = this.fb.group({
     customerName: ['', Validators.required],
@@ -43,6 +43,35 @@ export class CreateOrderPageComponent implements OnInit {
   protected readonly submitting = signal(false);
   protected readonly errorMessage = signal<string | null>(null);
 
+  /** Phone of the row selected in the customer combo (`''` when manual entry or cleared). */
+  protected readonly comboSelectedPhone = signal<string>('');
+
+  private readonly customerDialogEl = viewChild<ElementRef<HTMLDialogElement>>('customerDialog');
+
+  protected readonly modalSaving = signal(false);
+  protected readonly modalError = signal<string | null>(null);
+
+  protected readonly newCustomerModalForm = this.fb.group({
+    name: ['', Validators.required],
+    phone: ['', Validators.required],
+    email: ['']
+  });
+
+  protected readonly comboFilter = signal<string>('');
+
+  /** Select options filtered by typed filter (combo-style). */
+  protected readonly filteredCustomers = computed(() => {
+    const q = this.comboFilter().trim().toLowerCase();
+    const list = this.customers();
+    if (!q) return list;
+    return list.filter(
+      (c) =>
+        c.name.toLowerCase().includes(q) ||
+        c.phone.toLowerCase().includes(q) ||
+        (c.email?.toLowerCase().includes(q) ?? false)
+    );
+  });
+
   ngOnInit(): void {
     this.store.loadLookups();
 
@@ -53,8 +82,77 @@ export class CreateOrderPageComponent implements OnInit {
     }
   }
 
-  selectCustomer(phone: string): void {
-    if (!phone) return;
+  protected onComboFilterInput(value: string): void {
+    this.comboFilter.set(value);
+    this.comboSelectedPhone.set('');
+  }
+
+  protected onManualCustomerFieldsInput(): void {
+    const sel = this.comboSelectedPhone();
+    if (!sel) return;
+    const phone = (this.form.controls.customerPhone.value ?? '').trim();
+    if (phone !== sel) {
+      this.comboSelectedPhone.set('');
+    }
+  }
+
+  protected onComboSelectChange(phone: string): void {
+    this.comboSelectedPhone.set(phone);
+    this.comboFilter.set('');
+    if (phone) {
+      this.applyCustomerFromList(phone);
+    } else {
+      this.form.patchValue({ customerName: '', customerPhone: '', customerEmail: '' });
+    }
+  }
+
+  protected openNewCustomerModal(): void {
+    this.modalError.set(null);
+    this.newCustomerModalForm.reset({
+      name: '',
+      phone: '',
+      email: ''
+    });
+    queueMicrotask(() => this.customerDialogEl()?.nativeElement.showModal());
+  }
+
+  protected closeNewCustomerModal(): void {
+    this.customerDialogEl()?.nativeElement.close();
+  }
+
+  protected saveNewCustomerFromModal(): void {
+    if (this.newCustomerModalForm.invalid) {
+      this.newCustomerModalForm.markAllAsTouched();
+      return;
+    }
+    const raw = this.newCustomerModalForm.getRawValue();
+    const name = (raw.name ?? '').trim();
+    const phone = (raw.phone ?? '').trim();
+    const email = (raw.email ?? '').trim();
+    if (!name || !phone) return;
+
+    this.modalSaving.set(true);
+    this.modalError.set(null);
+    this.store
+      .saveCustomerToDirectory({ name, phone, email: email || undefined })
+      .pipe(take(1))
+      .subscribe({
+        next: () => {
+          this.modalSaving.set(false);
+          this.closeNewCustomerModal();
+          this.comboSelectedPhone.set(phone);
+          this.comboFilter.set('');
+          this.applyCustomerFromList(phone);
+          this.store.refreshCustomers();
+        },
+        error: (err) => {
+          this.modalSaving.set(false);
+          this.modalError.set(err?.error?.error ?? err?.error?.message ?? 'Failed to save customer');
+        }
+      });
+  }
+
+  private applyCustomerFromList(phone: string): void {
     const customer = this.customers().find((item) => item.phone === phone);
     if (!customer) return;
     this.form.patchValue({
@@ -100,6 +198,7 @@ export class CreateOrderPageComponent implements OnInit {
       .subscribe({
         next: () => {
           this.submitting.set(false);
+          this.store.refreshCustomers();
           this.router.navigateByUrl('/workshop-assignment');
         },
         error: (err) => {

@@ -91,6 +91,21 @@ export class OrdersStore {
     this.customersApi.list().subscribe((c) => this.customersSignal.set(c));
   }
 
+  refreshCustomers(): void {
+    this.customersApi.list().subscribe((c) => this.customersSignal.set(c));
+  }
+
+  saveCustomerToDirectory(payload: { name: string; phone: string; email?: string }) {
+    return this.customersApi.create(payload).pipe(
+      tap((customer) => {
+        const list = this.customersSignal().filter((c) => c.phone !== customer.phone);
+        list.push(customer);
+        list.sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
+        this.customersSignal.set(list);
+      })
+    );
+  }
+
   getOrderById(id: string | null) {
     if (!id) return undefined;
     return this.ordersSignal().find((o) => o.id === id);

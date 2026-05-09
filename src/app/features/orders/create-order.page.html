@@ -7,26 +7,46 @@
   <fieldset>
     <legend>{{ lang.isArabic() ? 'بيانات العميل' : 'Customer' }}</legend>
     <div class="grid">
-      <label>
-        {{ lang.isArabic() ? 'عميل مسجل' : 'Existing Customer' }}
-        <select (change)="selectCustomer($any($event.target).value)">
-          <option value="">{{ lang.isArabic() ? 'اختر عميل موجود' : 'Select existing customer' }}</option>
-          @for (customer of customers(); track customer.id) {
-            <option [value]="customer.phone">{{ customer.name }} - {{ customer.phone }}</option>
-          }
-        </select>
-      </label>
+      <div class="full customer-picker">
+        <span class="field-label">{{ lang.isArabic() ? 'العميل (قائمة + بحث)' : 'Customer (search & pick)' }}</span>
+        <div class="customer-combo">
+          <input
+            type="search"
+            class="combo-filter"
+            [placeholder]="lang.isArabic() ? 'ابحث بالاسم أو الهاتف…' : 'Search by name or phone…'"
+            [value]="comboFilter()"
+            (input)="onComboFilterInput($any($event.target).value)" />
+          <div class="customer-combo-row">
+            <select
+              class="customer-select"
+              [value]="comboSelectedPhone()"
+              (change)="onComboSelectChange($any($event.target).value)">
+              <option value="">{{ lang.isArabic() ? '— اختر عميلًا —' : '— Select customer —' }}</option>
+              @for (customer of filteredCustomers(); track customer.id) {
+                <option [value]="customer.phone">{{ customer.name }} — {{ customer.phone }}</option>
+              }
+            </select>
+            <button type="button" class="btn-modal" (click)="openNewCustomerModal()">
+              <i class="fa-solid fa-user-plus"></i>
+              {{ lang.isArabic() ? 'عميل جديد…' : 'New customer…' }}
+            </button>
+          </div>
+        </div>
+      </div>
       <label>
         {{ lang.isArabic() ? 'اسم العميل' : 'Customer Name' }}
-        <input formControlName="customerName" />
+        <input formControlName="customerName" (input)="onManualCustomerFieldsInput()" />
       </label>
       <label>
         {{ lang.isArabic() ? 'رقم الهاتف' : 'Customer Phone' }}
-        <input formControlName="customerPhone" placeholder="+20..." />
+        <input
+          formControlName="customerPhone"
+          placeholder="+20..."
+          (input)="onManualCustomerFieldsInput()" />
       </label>
       <label>
         {{ lang.isArabic() ? 'البريد الإلكتروني (اختياري)' : 'Email (optional)' }}
-        <input formControlName="customerEmail" type="email" />
+        <input formControlName="customerEmail" type="email" (input)="onManualCustomerFieldsInput()" />
       </label>
     </div>
   </fieldset>
@@ -111,3 +131,48 @@
     }
   </button>
 </form>
+
+<dialog #customerDialog class="customer-dialog" [attr.dir]="lang.isArabic() ? 'rtl' : 'ltr'">
+  <form class="customer-dialog-inner" [formGroup]="newCustomerModalForm" (submit)="$event.preventDefault(); saveNewCustomerFromModal()">
+    <header class="customer-dialog-head">
+      <h3>{{ lang.isArabic() ? 'تسجيل عميل جديد' : 'Register new customer' }}</h3>
+      <button type="button" class="btn-close" [attr.aria-label]="lang.isArabic() ? 'إغلاق' : 'Close'" (click)="closeNewCustomerModal()">
+        ×
+      </button>
+    </header>
+    <p class="customer-dialog-intro">
+      {{
+        lang.isArabic()
+          ? 'بعد الحفظ سيظهر العميل في القائمة ويُحدَّد تلقائيًا لهذا الطلب.'
+          : 'After saving, the customer appears in the list and is selected for this order.'
+      }}
+    </p>
+    <label>
+      {{ lang.isArabic() ? 'اسم العميل' : 'Name' }}
+      <input formControlName="name" />
+    </label>
+    <label>
+      {{ lang.isArabic() ? 'رقم الهاتف' : 'Phone' }}
+      <input formControlName="phone" placeholder="+20..." />
+    </label>
+    <label>
+      {{ lang.isArabic() ? 'البريد (اختياري)' : 'Email (optional)' }}
+      <input formControlName="email" type="email" />
+    </label>
+    @if (modalError(); as me) {
+      <div class="error modal-error">{{ me }}</div>
+    }
+    <footer class="customer-dialog-actions">
+      <button type="button" class="btn-cancel" [disabled]="modalSaving()" (click)="closeNewCustomerModal()">
+        {{ lang.isArabic() ? 'إلغاء' : 'Cancel' }}
+      </button>
+      <button type="submit" class="btn-save" [disabled]="modalSaving()">
+        {{
+          modalSaving()
+            ? (lang.isArabic() ? 'جارٍ الحفظ…' : 'Saving…')
+            : (lang.isArabic() ? 'حفظ والاختيار' : 'Save & select')
+        }}
+      </button>
+    </footer>
+  </form>
+</dialog>
